@@ -1,0 +1,38 @@
+version: '3.4'
+
+services:
+
+  backend:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: iproj-backend-container
+    image: iproj-backend-image:latest
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+    ports:
+      - 8080:8080
+      - 4343:443
+
+    networks:
+      - db_bridge
+
+  database:
+    build: 
+      context: .
+      dockerfile: ./apps/postgres/Dockerfile
+    container_name: iproj-database-container
+    hostname: iproj-database-host
+    image: iproj-database-image
+    restart: always
+    ports:
+      - 5430:5432
+    networks:
+      - db_bridge
+
+networks:
+  db_bridge:
+    driver: bridge
+  
