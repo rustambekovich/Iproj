@@ -2,8 +2,6 @@ using AutoMapper;
 using Iproj.DataAccess;
 using Iproj.Services;
 using Iproj.Services.Auth;
-using Iproj.Services.Auth;
-using Iproj.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

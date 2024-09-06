@@ -57,13 +57,13 @@ public class Config
                     ClientSecrets = new List<Secret> {new Secret("Wabase".Sha256())},
 
                     AllowedGrantTypes = GrantTypes.Code,
-                    RedirectUris = new List<string> 
+                    RedirectUris = new List<string>
                     { "http://localhost:8888/signin-oidc",
                       "http://192.168.0.52:8888/signin-oidc",
                     },
                     FrontChannelLogoutUri = "http://localhost:8888/signout-oidc",
-                    PostLogoutRedirectUris = 
-                    { 
+                    PostLogoutRedirectUris =
+                    {
                         "http://localhost:8888/signout-callback-oidc",
                         "http://192.168.0.52:8888/signout-callback-oidc"
                     },
@@ -79,20 +79,5 @@ public class Config
                     RequirePkce = true,
                     AllowPlainTextPkce = false
                 }
-
-                /*new Client
-                {
-                    ClientId = "mvc",
-                    ClientSecrets = { new Secret("ClientSecret1".Sha256()) },
-                    AllowedGrantTypes = GrantTypes.Code,
-                    RedirectUris = { "https://localhost:5444/signin-oidc" },
-                    FrontChannelLogoutUri = "https://localhost:5444/signout-oidc",
-                    PostLogoutRedirectUris = { "https://localhost:5444/signout-callback-oidc" },
-                    AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "message.read", "message.write" },
-                    RequirePkce = true,
-                    RequireConsent = true,
-                    AllowPlainTextPkce = false
-                },*/
            };
 }

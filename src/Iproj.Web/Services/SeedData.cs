@@ -34,6 +34,8 @@ public class SeedData
                     );
             }
         );
+
+        // IdentityServer Configuration Database add context(client, scope, resourse)
         services.AddConfigurationDbContext(
             options =>
             {
@@ -55,8 +57,8 @@ public class SeedData
 
         //EnsureSeedData(context);
 
-        var ctx = scope.ServiceProvider.GetService<IprojAspNetDbContext>();
-        ctx!.Database.Migrate();
+      /*  var ctx = scope.ServiceProvider.GetService<IprojAspNetDbContext>();
+        ctx!.Database.Migrate();*/
 
         EnsureUsers(scope);
     }

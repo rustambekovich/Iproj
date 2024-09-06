@@ -44,21 +44,22 @@ public class AuthService : IAuthService
         {
             var local = context.IdP == IdentityServerConstants.LocalIdentityProvider;
 
-            // this is meant to short circuit the UI and only trigger the one external IdP
             var vm = new LoginViewModel
             {
                 EnableLocalLogin = local,
                 ReturnUrl = returnUrl,
-                Username = context?.LoginHint,
+                Username = context?.LoginHint!,
             };
 
             return vm;
         }
 
         var allowLocal = true;
+
         if (context?.Client.ClientId != null)
         {
             var client = await _clientStore.FindEnabledClientByIdAsync(context.Client.ClientId);
+
             if (client != null)
             {
                 allowLocal = client.EnableLocalLogin;
@@ -67,7 +68,6 @@ public class AuthService : IAuthService
 
         return new LoginViewModel
         {
-            AllowRememberLogin = AccountOptions.AllowRememberLogin,
             EnableLocalLogin = allowLocal && AccountOptions.AllowLocalLogin,
             ReturnUrl = returnUrl,
             Username = context?.LoginHint!,
@@ -78,7 +78,6 @@ public class AuthService : IAuthService
     {
         var vm = await BuildLoginViewModelAsync(model.ReturnUrl);
         vm.Username = model.Username;
-        vm.RememberLogin = model.RememberLogin;
         return vm;
     }
 
@@ -94,8 +93,6 @@ public class AuthService : IAuthService
             return vm;
         }
 
-        // show the logout prompt. this prevents attacks where the user
-        // is automatically signed out by another malicious web page.
         return vm;
     }
 
@@ -125,8 +122,4 @@ public class AuthService : IAuthService
         }
     }
 
-    public Task<object> LogoutAsync(LogoutInputModel model)
-    {
-        throw new NotImplementedException();
-    }
 }

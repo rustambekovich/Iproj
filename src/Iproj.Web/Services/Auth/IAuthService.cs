@@ -10,6 +10,4 @@ public interface IAuthService
     public Task<LoginViewModel> BuildLoginViewModelAsync(LoginInputModel model);
     public Task<IdentityUser> LoginAsync(LoginInputModel model);
     public Task<LogoutViewModel> BuildLogoutViewModelAsync(string logoutId);
-    public Task<object> LogoutAsync(LogoutInputModel model);
-
 }
