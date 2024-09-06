@@ -57,9 +57,16 @@ public class Config
                     ClientSecrets = new List<Secret> {new Secret("Wabase".Sha256())},
 
                     AllowedGrantTypes = GrantTypes.Code,
-                    RedirectUris = new List<string> {"https://localhost:7250/signin-oidc"},
-                    FrontChannelLogoutUri = "https://localhost:7250/signout-oidc",
-                    PostLogoutRedirectUris = { "https://localhost:7250/signout-callback-oidc" },
+                    RedirectUris = new List<string> 
+                    { "http://localhost:8888/signin-oidc",
+                      "http://192.168.0.52:8888/signin-oidc",
+                    },
+                    FrontChannelLogoutUri = "http://localhost:8888/signout-oidc",
+                    PostLogoutRedirectUris = 
+                    { 
+                        "http://localhost:8888/signout-callback-oidc",
+                        "http://192.168.0.52:8888/signout-callback-oidc"
+                    },
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,

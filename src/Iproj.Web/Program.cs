@@ -47,6 +47,7 @@ builder.Services.AddControllersWithViews();
 var app = builder.Build();
 
 app.ApplyMigrations();
+
 app.UseStaticFiles();
 app.UseRouting();
 app.UseIdentityServer();
