@@ -13,7 +13,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS serve
 WORKDIR /app
 COPY --from=build /src/Iproj.Web/output .
 
-Expose 8080
+EXPOSE 8080
 EXPOSE 5000
 EXPOSE 443
 
