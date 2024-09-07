@@ -61,7 +61,6 @@ public class Config
                     {
                         "http://192.168.0.52:5272/signin-oidc",
                     },
-                    //FrontChannelLogoutUri = "http://localhost:5272/signout-oidc",
                     PostLogoutRedirectUris =
                     {
                         "http://localhost:5272/signout-callback-oidc",
