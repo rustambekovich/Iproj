@@ -7,7 +7,7 @@ on:
 env:
   API_IMAGE_NAME: iproj-image
   API_CONTAINER_NAME: iproj-container
-  API_PORT: 8080:8080
+  API_PORT: 8080:5000
   
   REPO_NAME: ${{ github.repository }}
   REGISTRY: ghcr.io
