@@ -1,4 +1,4 @@
-name: Iproj development branch
+name: iproj development branch
  
 on:
   push:
