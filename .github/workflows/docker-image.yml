@@ -7,7 +7,8 @@ on:
 env:
   API_IMAGE_NAME: iproj-image
   API_CONTAINER_NAME: iproj-container
-  API_PORT: 8080:5000
+  API_PORT: 8080:8080
+  API_PORT2: 8070:5000
   
   REPO_NAME: ${{ github.repository }}
   REGISTRY: ghcr.io
@@ -63,5 +64,5 @@ jobs:
             docker pull "${{ env.REGISTRY }}/${{ env.REPO_NAME}}/${{ env.API_IMAGE_NAME }}-${{ github.sha }}"
             docker stop "${{ env.API_CONTAINER_NAME }}" || true
             docker rm "${{ env.API_CONTAINER_NAME }}" || true
-            docker run -d --restart unless-stopped --name "${{ env.API_CONTAINER_NAME }}" -p "${{ env.API_PORT }}" "${{ env.REGISTRY }}/${{ env.REPO_NAME}}/${{ env.API_IMAGE_NAME }}:${{ github.sha }}"
+            docker run -d --restart unless-stopped --name "${{ env.API_CONTAINER_NAME }}" -p "${{ env.API_PORT }}" -p "${{ env.API_PORT2 }}" "${{ env.REGISTRY }}/${{ env.REPO_NAME}}/${{ env.API_IMAGE_NAME }}:${{ github.sha }}"
            
