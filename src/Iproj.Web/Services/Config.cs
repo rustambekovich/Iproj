@@ -59,12 +59,12 @@ public class Config
                     AllowedGrantTypes = GrantTypes.Code,
                     RedirectUris = new List<string>
                     {
-                        "http://192.168.0.52:5272/signin-oidc",
+                        "http://localhost:4040/signin-oidc",
                     },
                     //FrontChannelLogoutUri = "http://localhost:5272/signout-oidc",
                     PostLogoutRedirectUris =
                     {
-                        "http://localhost:5272/signout-callback-oidc",
+                        "http://localhost:4040/signout-callback-oidc",
                     },
                     AllowedScopes = new List<string>
                     {
