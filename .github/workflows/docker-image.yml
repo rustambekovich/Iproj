@@ -9,7 +9,7 @@ env:
   API_CONTAINER_NAME: iproj-container
   API_PORT: 8080:8080
   
-  REPO_NAME: iproj
+  REPO_NAME: rustambekovich/iproj
   REGISTRY: ghcr.io
   SSH_HOST: ${{ secrets.SERVER_IP }}
   SSH_USER: ${{ secrets.SERVER_USERNAME }}
