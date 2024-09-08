@@ -26,8 +26,11 @@ builder.Services.AddDbContext<IprojAspNetDbContext>(options =>
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<IprojAspNetDbContext>();
 
-builder.Services.AddIdentityServer()
-    .AddConfigurationStore(options =>
+builder.Services.AddIdentityServer(options =>
+{
+    // Set the issuer URI to ensure all URLs are generated with HTTPS
+    options.IssuerUri = "https://auth.iproj.uz";
+}).AddConfigurationStore(options =>
     {
         options.ConfigureDbContext = d =>
         d.UseNpgsql(defaultConnection, opt => opt.MigrationsAssembly(assblyname));
