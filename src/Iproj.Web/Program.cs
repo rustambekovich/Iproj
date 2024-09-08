@@ -12,10 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 var assblyname = typeof(Program).Assembly.GetName().Name;
 
 // Load Kestrel configuration from appsettings.json
-builder.WebHost.UseKestrel(options =>
+/*builder.WebHost.UseKestrel(options =>
 {
     options.Configure(builder.Configuration.GetSection("Kestrel"));
-});
+});*/
 
 var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 
