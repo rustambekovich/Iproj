@@ -13,7 +13,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
 
     ports:
-      - 5000:8080
+      - 8080:8080
       - 4343:443
 
   
