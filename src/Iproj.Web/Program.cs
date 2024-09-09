@@ -53,6 +53,11 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+app.Use((context, next) => 
+{ 
+    context.Request.Scheme = "https"; return next(); 
+});
+
 app.ApplyMigrations();
 
 app.UseStaticFiles();
