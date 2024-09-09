@@ -59,7 +59,6 @@ app.Use((context, next) =>
     context.Request.Scheme = "https"; return next(); 
 });
 
-// Add the rate limiting middleware before any other middleware
 app.UseMiddleware<RateLimitingMiddleware>();
 
 app.ApplyMigrations();
