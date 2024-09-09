@@ -18,11 +18,11 @@ public class Config
                     }
               };
 
-    public static IEnumerable<ApiScope> ApiScopes =>
+    /*public static IEnumerable<ApiScope> ApiScopes =>
         new[]
         {
-            new ApiScope("weatherApi.read", "Read Access to Weather API"),
-            new ApiScope("weatherApi.write", "Write Access to Weather API"),
+            new ApiScope("messageApi.read", "Read Access to Message API"),
+            new ApiScope("messageApi.write", "Write Access to Message API"),
         };
 
     public static IEnumerable<ApiResource> ApiResources =>
@@ -32,16 +32,16 @@ public class Config
                 {
                     Name = "weatherApi",
                     DisplayName = "Weather Api",
-                    Description = "Allow the application to access Weather Api on your behalf",
-                    Scopes = new List<string> { "weatherApi.read", "weatherApi.write"},
+                    Description = "Allow the application to access Message Api on your behalf",
+                    Scopes = new List<string> { "messageApi.read", "messageApi.write"},
                     ApiSecrets = new List<Secret> {new Secret("Wabase".Sha256())},
                     UserClaims = new List<string> {"role"}
                 }
             };
-
+*/
     public static IEnumerable<Client> Clients =>
            new[]
-           {
+           {/*
                 new Client
                 {
                     ClientId = "weatherApi",
@@ -49,7 +49,7 @@ public class Config
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets = new List<Secret> {new Secret("Wabase".Sha256())},
                     AllowedScopes = new List<string> {"weatherApi.read"}
-                },
+                },*/
                 new Client
                 {
                     ClientId = "oidcMVCApp",
@@ -72,7 +72,8 @@ public class Config
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
                         "role",
-                        "weatherApi.read"
+                        "message.read",
+                        "message.write"
                     },
 
                     RequirePkce = true,
