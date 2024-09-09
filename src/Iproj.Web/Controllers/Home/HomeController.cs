@@ -23,7 +23,7 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        if (_environment.IsDevelopment() || _environment.IsProduction())
+        if (_environment.IsDevelopment())
         {
             // only show in development
             return View();
