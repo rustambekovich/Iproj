@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Iproj.Web.Commons;
+using Iproj.Web.Services.Commons;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +58,9 @@ app.Use((context, next) =>
 { 
     context.Request.Scheme = "https"; return next(); 
 });
+
+// Add the rate limiting middleware before any other middleware
+app.UseMiddleware<RateLimitingMiddleware>();
 
 app.ApplyMigrations();
 
