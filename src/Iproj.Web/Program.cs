@@ -42,8 +42,8 @@ builder.Services.AddIdentityServer(options =>
     })
     .AddInMemoryClients(Config.Clients)
     .AddInMemoryIdentityResources(Config.IdentityResources)
-    /*.AddInMemoryApiResources(Config.ApiResources)
-    .AddInMemoryApiScopes(Config.ApiScopes)*/
+    .AddInMemoryApiResources(Config.ApiResources)
+    .AddInMemoryApiScopes(Config.ApiScopes)
     .AddDeveloperSigningCredential();
 
 

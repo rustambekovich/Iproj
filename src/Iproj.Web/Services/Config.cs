@@ -18,7 +18,7 @@ public class Config
                     }
               };
 
-   /* public static IEnumerable<ApiScope> ApiScopes =>
+    public static IEnumerable<ApiScope> ApiScopes =>
         new[]
         {
             new ApiScope("weatherApi.read", "Read Access to Weather API"),
@@ -37,19 +37,19 @@ public class Config
                     ApiSecrets = new List<Secret> {new Secret("Wabase".Sha256())},
                     UserClaims = new List<string> {"role"}
                 }
-            };*/
+            };
 
     public static IEnumerable<Client> Clients =>
            new[]
            {
-                /*new Client
+                new Client
                 {
                     ClientId = "weatherApi",
                     ClientName = "ASP.NET Core Weather Api",
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets = new List<Secret> {new Secret("Wabase".Sha256())},
                     AllowedScopes = new List<string> {"weatherApi.read"}
-                },*/
+                },
                 new Client
                 {
                     ClientId = "oidcMVCApp",

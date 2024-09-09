@@ -129,7 +129,7 @@ public class SeedData
             context.SaveChanges();
         }
 
-        /*if (!context.ApiScopes.Any())
+        if (!context.ApiScopes.Any())
         {
             foreach (var resource in Config.ApiScopes.ToList())
             {
@@ -147,6 +147,6 @@ public class SeedData
             }
 
             context.SaveChanges();
-        }*/
+        }
     }
 }
