@@ -15,7 +15,7 @@ public class RateLimitingMiddleware
         {
             TokenLimit = 3, // Total number of tokens 
             TokensPerPeriod = 3, 
-            ReplenishmentPeriod = TimeSpan.FromSeconds(10), 
+            ReplenishmentPeriod = TimeSpan.FromSeconds(1), 
             AutoReplenishment = true 
         });
     }
