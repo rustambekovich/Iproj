@@ -59,7 +59,7 @@ app.Use((context, next) =>
     context.Request.Scheme = "https"; return next(); 
 });
 
-app.UseMiddleware<RateLimitingMiddleware>();
+//app.UseMiddleware<RateLimitingMiddleware>();
 
 app.ApplyMigrations();
 
