@@ -8,6 +8,6 @@ public class IprojAspNetDbContext : IdentityDbContext
     public IprojAspNetDbContext(DbContextOptions<IprojAspNetDbContext> options)
         : base(options)
     {
-        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        //AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
 }
