@@ -60,13 +60,11 @@ public class Config
                     RedirectUris = new List<string>
                     {
                         "https://cl.iproj.uz/signin-oidc",
-                        "http://cl.iproj.uz/signin-oidc",
                     },
-                    //FrontChannelLogoutUri = "https://cl.iproj.uz/signout-oidc",
+                    FrontChannelLogoutUri = "https://cl.iproj.uz/signout-oidc",
                     PostLogoutRedirectUris =
                     {
                         "https://cl.iproj.uz/signout-callback-oidc",
-                        "http://cl.iproj.uz/signout-callback-oidc",
                     },
                     AllowedScopes = new List<string>
                     {
