@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Iproj.Controllers.Home;
 
 [SecurityHeaders]
-[AllowAnonymous]
+[Authorize]
 public class HomeController : Controller
 {
     private readonly IIdentityServerInteractionService _interaction;

@@ -9,6 +9,7 @@ using Iproj.Helpers;
 using Iproj.InputModels;
 using Iproj.Services.Auth;
 using Iproj.ViewModels;
+using Iproj.Web.Commons;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -46,8 +47,8 @@ public class AccountController : Controller
     [HttpGet]
     public async Task<IActionResult> Login(string returnUrl)
     {
-        // build a model login page
-        var vm = await _authService.BuildLoginViewModelAsync(returnUrl);
+
+        var vm = await BuildLoginViewModelAsync(returnUrl);
 
         return View(vm);
     }
@@ -56,7 +57,6 @@ public class AccountController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginInputModel model, string button)
     {
-        // check the context of an authorization request
         var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
 
         if (ModelState.IsValid)
@@ -70,8 +70,15 @@ public class AccountController : Controller
                 await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName, clientId: context?.Client.ClientId));
 
                 AuthenticationProperties props = null!;
+                if (AccountOptions.AllowRememberLogin && model.RememberLogin)
+                {
+                    props = new AuthenticationProperties
+                    {
+                        IsPersistent = true,
+                        ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
+                    };
+                };
 
-                // issue authentication cookie with subject ID and username and claims
                 var isuser = new IdentityServerUser(user.Id)
                 {
                     DisplayName = user.UserName,
@@ -86,11 +93,9 @@ public class AccountController : Controller
                     if (context.IsNativeClient())
                         return this.LoadingPage("Redirect", model.ReturnUrl);
 
-                    // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
                     return Redirect(model.ReturnUrl);
                 }
 
-                // request for a local page
                 if (Url.IsLocalUrl(model.ReturnUrl))
                 {
                     return Redirect(model.ReturnUrl);
@@ -101,7 +106,6 @@ public class AccountController : Controller
                 }
                 else
                 {
-                    // user might have clicked on a malicious link - should be logged
                     throw new Exception("invalid return URL");
                 }
             }
@@ -163,9 +167,69 @@ public class AccountController : Controller
 
     private async Task<LoginViewModel> BuildLoginViewModelAsync(LoginInputModel model)
     {
-        var vm = await _authService.BuildLoginViewModelAsync(model);
-
+        var vm = await BuildLoginViewModelAsync(model.ReturnUrl);
+        vm.Username = model.Username;
+        vm.RememberLogin = model.RememberLogin;
         return vm;
+    }
+
+    private async Task<LoginViewModel> BuildLoginViewModelAsync(string returnUrl)
+    {
+        var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
+
+        if (context?.IdP != null && await _schemeProvider.GetSchemeAsync(context.IdP) != null)
+        {
+            var local = context.IdP == IdentityServer4.IdentityServerConstants.LocalIdentityProvider;
+
+            var vm = new LoginViewModel
+            {
+                EnableLocalLogin = local,
+                ReturnUrl = returnUrl,
+                Username = context?.LoginHint!,
+            };
+
+            if (!local)
+            {
+                vm.ExternalProviders = new[] { new ExternalProvider { AuthenticationScheme = context.IdP } };
+            }
+
+            return vm;
+        }
+
+        var schemes = await _schemeProvider.GetAllSchemesAsync();
+
+        var providers = schemes
+            .Where(x => x.DisplayName != null)
+            .Select(x => new ExternalProvider
+            {
+                DisplayName = x.DisplayName ?? x.Name,
+                AuthenticationScheme = x.Name
+            }).ToList();
+
+        var allowLocal = true;
+
+        if (context?.Client.ClientId != null)
+        {
+            var client = await _clientStore.FindEnabledClientByIdAsync(context.Client.ClientId);
+            if (client != null)
+            {
+                allowLocal = client.EnableLocalLogin;
+
+                if (client.IdentityProviderRestrictions != null && client.IdentityProviderRestrictions.Any())
+                {
+                    providers = providers.Where(provider => client.IdentityProviderRestrictions.Contains(provider.AuthenticationScheme)).ToList();
+                }
+            }
+        }
+
+        return new LoginViewModel
+        {
+            AllowRememberLogin = AccountOptions.AllowRememberLogin,
+            EnableLocalLogin = allowLocal && AccountOptions.AllowLocalLogin,
+            ReturnUrl = returnUrl,
+            Username = context?.LoginHint!,
+            ExternalProviders = providers.ToArray()
+        };
     }
 
     private async Task<LoggedOutViewModel> BuildLoggedOutViewModelAsync(string logoutId)
