@@ -71,8 +71,8 @@ public class AccountController : Controller
 
                 AuthenticationProperties props = null!;
 
-                // issue authentication cookie with subject ID and username and claims
-                var isuser = new IdentityServerUser(user.Id)
+                var subAndEmail = user.Id + '|' + user.Email;
+                var isuser = new IdentityServerUser(subAndEmail)
                 {
                     DisplayName = user.UserName,
                     AdditionalClaims = userCalms,
