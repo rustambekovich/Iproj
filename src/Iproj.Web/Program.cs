@@ -24,8 +24,22 @@ builder.Services.AddDbContext<IprojAspNetDbContext>(options =>
     options.UseNpgsql(defaultConnection,
     d => d.MigrationsAssembly(assblyname)));
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<IprojAspNetDbContext>();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+{
+	options.Password.RequireDigit = false; 
+	options.Password.RequireLowercase = false; 
+	options.Password.RequireUppercase = false; 
+	options.Password.RequireNonAlphanumeric = false; 
+	options.Password.RequiredLength = 4; 
+	options.Password.RequiredUniqueChars = 0; 
+
+	// Kirish sozlamalari (Login)
+	options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
+	options.Lockout.MaxFailedAccessAttempts = 5;
+
+	options.User.RequireUniqueEmail = true; 
+})
+	.AddEntityFrameworkStores<IprojAspNetDbContext>();
 
 builder.Services.AddIdentityServer(options =>
 {
