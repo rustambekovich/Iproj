@@ -75,7 +75,7 @@ app.Use((context, next) =>
 
 //app.UseMiddleware<RateLimitingMiddleware>();
 
-app.ApplyMigrations();
+//app.ApplyMigrations();
 
 app.UseStaticFiles();
 app.UseRouting();
