@@ -79,7 +79,8 @@ public class AccountController : Controller
                     };
                 };
 
-                var isuser = new IdentityServerUser(user.Id)
+                var subAndEmail = user.Id + '|' + user.Email;
+                var isuser = new IdentityServerUser(subAndEmail)
                 {
                     DisplayName = user.UserName,
                     AdditionalClaims = userCalms,
