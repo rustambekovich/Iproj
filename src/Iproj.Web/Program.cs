@@ -29,7 +29,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 builder.Services.AddIdentityServer(options =>
 {
     // Set the issuer URI to ensure all URLs are generated with HTTPS
-    options.IssuerUri = "https://auth.iproj.uz";
+    options.IssuerUri = "https://localhost:7147";
 }).AddConfigurationStore(options =>
     {
         options.ConfigureDbContext = d =>

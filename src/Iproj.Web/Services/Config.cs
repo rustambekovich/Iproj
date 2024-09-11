@@ -59,12 +59,12 @@ public class Config
                     AllowedGrantTypes = GrantTypes.Code,
                     RedirectUris = new List<string>
                     {
-                        "https://iproj.uz/signin-oidc",
+                        "https://localhost:7150/signin-oidc",
                     },
-                    FrontChannelLogoutUri = "https://iproj.uz/signout-oidc",
+                    FrontChannelLogoutUri = "https://localhost:7150/signout-oidc",
                     PostLogoutRedirectUris =
                     {
-                        "https://iproj.uz/signout-callback-oidc",
+                        "https://localhost:7150/signout-callback-oidc",
                     },
                     AllowedScopes = new List<string>
                     {
