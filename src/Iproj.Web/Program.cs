@@ -84,10 +84,10 @@ SeedData.EnsureSeedData(defaultConnection!);
 
 app.UseEndpoints(endpoints =>
 {
-	/*endpoints.MapControllerRoute(
+    endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Account}/{action=Login}/{id?}");*/
-	endpoints.MapDefaultControllerRoute();
+        pattern: "{controller=Account}/{action=Login}/{id?}");
+    //endpoints.MapDefaultControllerRoute();
 });
 
 
