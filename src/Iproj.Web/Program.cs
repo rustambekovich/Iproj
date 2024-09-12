@@ -1,12 +1,11 @@
-using AutoMapper;
 using Iproj.DataAccess;
 using Iproj.Services;
 using Iproj.Services.Auth;
+using Iproj.Web.Commons;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Iproj.Web.Commons;
-using Iproj.Web.Services.Commons;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +44,7 @@ builder.Services.AddIdentityServer(options =>
 {
     // Set the issuer URI to ensure all URLs are generated with HTTPS
     options.IssuerUri = "https://auth.iproj.uz";
+    
 }).AddConfigurationStore(options =>
     {
         options.ConfigureDbContext = d =>
@@ -66,11 +66,25 @@ builder.Services.AddMvc();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+        .AddCookie(options =>
+        {
+            /*options.LoginPath = "/Account/Login"; 
+            options.AccessDeniedPath = "/Account/AccessDenied";*/
+        });
+
+builder.Services.AddAuthorization(options =>
+{
+    /*options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();*/
+});
+
 var app = builder.Build();
 
-app.Use((context, next) => 
-{ 
-    context.Request.Scheme = "https"; return next(); 
+app.Use((context, next) =>
+{
+    context.Request.Scheme = "https"; return next();
 });
 
 //app.UseMiddleware<RateLimitingMiddleware>();
@@ -79,15 +93,19 @@ app.Use((context, next) =>
 
 app.UseStaticFiles();
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseIdentityServer();
 SeedData.EnsureSeedData(defaultConnection!);
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapControllerRoute(
+    /*endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Account}/{action=Login}/{id?}");
-    //endpoints.MapDefaultControllerRoute();
+        pattern: "{controller=Account}/{action=Login}/{id?}");*/
+    endpoints.MapDefaultControllerRoute();
 });
 
 
