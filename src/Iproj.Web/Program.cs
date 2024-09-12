@@ -43,7 +43,8 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 builder.Services.AddIdentityServer(options =>
 {
     // Set the issuer URI to ensure all URLs are generated with HTTPS
-    options.IssuerUri = "https://localhost:7147";
+    options.IssuerUri = "https://auth.iproj.uz";
+    
 }).AddConfigurationStore(options =>
     {
         options.ConfigureDbContext = d =>
@@ -68,15 +69,15 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie(options =>
         {
-            options.LoginPath = "/Account/Login"; 
-            options.AccessDeniedPath = "/Account/AccessDenied";
+            /*options.LoginPath = "/Account/Login"; 
+            options.AccessDeniedPath = "/Account/AccessDenied";*/
         });
 
 builder.Services.AddAuthorization(options =>
 {
-    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+    /*options.FallbackPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
-        .Build();
+        .Build();*/
 });
 
 var app = builder.Build();
@@ -101,10 +102,10 @@ SeedData.EnsureSeedData(defaultConnection!);
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapControllerRoute(
+    /*endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Account}/{action=Login}/{id?}");
-    //endpoints.MapDefaultControllerRoute();
+        pattern: "{controller=Account}/{action=Login}/{id?}");*/
+    endpoints.MapDefaultControllerRoute();
 });
 
 
