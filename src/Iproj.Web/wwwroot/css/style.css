@@ -4,6 +4,33 @@
  * Copyright 2011-2019 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
+.input-group {
+    position: relative;
+}
+
+    .input-group .form-control {
+        border-radius: 5px 0 0 5px; /* Bu yerda burchak radiuslarini o'zgartiryapmiz */
+    }
+
+.input-group-append {
+    border-radius: 0 0 0 0; /* Oxirgi button uchun burchak radius */
+    background-color: white; /* Tugma fonini oq qilyapmiz */
+    border-left: 0; /* Qo'shimcha chiziqni olib tashlash */
+}
+
+.input-group-append button {
+    background-color: transparent; /* Tugma fonini shaffof qilamiz */
+    border: none; /* Tugma uchun chegara olib tashlanadi */
+    border-radius: 0 0 0 0; /* Border-radiusni ikon qismi uchun */
+}
+
+.input-group-append img {
+    display: block;
+    width: 20px;
+    height: 20px;
+}
+
+
 :root {
   --blue: #007bff;
   --indigo: #6610f2;
@@ -6630,7 +6657,7 @@ button.bg-dark:focus {
 .mx-4 {
   margin-right: 1.5rem !important; }
 
-.mb-4,
+.mb-4
 .my-4 {
   margin-bottom: 1.5rem !important; }
 

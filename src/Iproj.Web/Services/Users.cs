@@ -37,48 +37,48 @@ public class Users
                 },
                 new User
                 {
-                    Name = "Johndoe",
-                    Username = "johndoe@gmail.com",
+                    Name = "Samandarbek",
+                    Username = "samandarbekyr@gmail.com",
                     Password = "12qwAS!@",
                     Claims = new List<Claim>
                     {
-                        new Claim(JwtClaimTypes.Email, "johndoe@gmail.com"),
+                        new Claim(JwtClaimTypes.Email, "samandarbekyr@gmail.com"),
                         new Claim(JwtClaimTypes.Role, "Worker"),
                         new Claim(JwtClaimTypes.PhoneNumber, "901234567"),
                     }
                 },
                 new User
                 {
-                    Name = "Janedoe",
-                    Username = "janedoe@gmail.com",
+                    Name = "Samandar",
+                    Username = "sharpistmaster@gmail.com",
                     Password = "12qwAS!@",
                     Claims = new List<Claim>
                     {
-                        new Claim(JwtClaimTypes.Email, "janedoe@gmail.com"),
+                        new Claim(JwtClaimTypes.Email, "sharpistmaster@gmail.com"),
                         new Claim(JwtClaimTypes.Role, "Worker"),
                         new Claim(JwtClaimTypes.PhoneNumber, "991234567"),
                     }
                 },
                 new User
                 {
-                    Name = "William",
-                    Username = "william.shakespeare@gmail.com",
+                    Name = "Behruz",
+                    Username = "uzgrandmaster@gmail.com",
                     Password = "12qwAS!@",
                     Claims = new List<Claim>
                     {
-                        new Claim(JwtClaimTypes.Email, "william.shakespeare@gmail.com"),
+                        new Claim(JwtClaimTypes.Email, "uzgrandmaster@gmail.com"),
                         new Claim(JwtClaimTypes.Role, "Worker"),
                         new Claim(JwtClaimTypes.PhoneNumber, "771234567"),
                     }
                 },
                 new User
                 {
-                    Name = "Elon",
-                    Username = "elon.musk@gmail.com",
+                    Name = "Olim",
+                    Username = "olim@gmail.com",
                     Password = "12qwAS!@",
                     Claims = new List<Claim>
                     {
-                        new Claim(JwtClaimTypes.Email, "elon.musk@gmail.com"),
+                        new Claim(JwtClaimTypes.Email, "olim@gmail.com"),
                         new Claim(JwtClaimTypes.Role, "Worker"),
                         new Claim(JwtClaimTypes.PhoneNumber, "661234567"),
                     }

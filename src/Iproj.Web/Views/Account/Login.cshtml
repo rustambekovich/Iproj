@@ -17,24 +17,28 @@
 </head>
 <body>
 	<div class="login-page">
+		<partial name="_ValidationSummary" />
+		<partial name="_ValidSummary" />
 
-			<partial name="_ValidationSummary" />
-			<partial name="_ValidSummary" />
+		<div class="row justify-content-center">
+			@if (Model.EnableLocalLogin)
+			{
+				<div class="col-md-7 col-lg-5">
+					<div class="login-wrap p-4 p-md-5">
+						<div class="icon d-flex align-items-center justify-content-center">
+							<h1>
+								<img src="~/Iproj_login_image5.png" height="120px" width="120px" />
+							</h1>
+							<span class="fa fa-user-o"></span>
+						</div>
+							<h3 class="text-center mt-4">Welcome to Auth Iproj</h3>
+						@* <div class="form-group" style="margin-top: 30px;">
+							<h5 class="text-left">Please login in with your email address</h5>
+						</div> *@
 
-			<div class="row justify-content-center">
-				@if (Model.EnableLocalLogin)
-				{
-					<div class="col-md-7 col-lg-5">
-						<div class="login-wrap p-4 p-md-5">
-							<div class="icon d-flex align-items-center justify-content-center">
-								<h1>
-									<img src="~/Iproj_login_image5.png"; height:"120px"; width="120px" />
-								</h1>
-								<span class="fa fa-user-o"></span>
-							</div>
-							<h3 class="text-center mb-4">Sign In</h3>
 						<form asp-route="Login" method="post">
 							<input type="hidden" asp-for="ReturnUrl" />
+
 
 							<div class="form-group">
 								<label asp-for="Username">Email</label>
@@ -43,25 +47,38 @@
 
 							<div class="form-group">
 								<label asp-for="Password">Password</label>
-								<input type="password" class="form-control" placeholder="Password" asp-for="Password" autocomplete="off" required />
+								<div class="input-group">
+									<!-- Password Input -->
+									<input type="password" class="form-control" id="password" placeholder="Password" asp-for="Password" autocomplete="off" required
+										   style="border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-right: 0;" />
+
+									<!-- Eye Button -->
+									<div class="input-group-append">
+										<button class="btn" type="button" id="togglePassword"
+												style="border: 2px solid black; border-top-right-radius: 100px; border-left: 0;">
+											<svg id="toggleIcon" xmlns="http://www.w3.org/2000/svg" height="25px" width="25px" viewBox="0 0 24 24" fill="none">
+												<!-- Default eye icon for visibility -->
+												<path id="eyePath" d="M12 4.5C7.5 4.5 3.7 7.5 2 12C3.7 16.5 7.5 19.5 12 19.5C16.5 19.5 20.3 16.5 22 12C20.3 7.5 16.5 4.5 12 4.5ZM12 17C8.8 17 6.1 14.8 5 12C6.1 9.2 8.8 7 12 7C15.2 7 17.9 9.2 19 12C17.9 14.8 15.2 17 12 17ZM12 9.5C10.6 9.5 9.5 10.6 9.5 12C9.5 13.4 10.6 14.5 12 14.5C13.4 14.5 14.5 13.4 14.5 12C14.5 10.6 13.4 9.5 12 9.5Z" fill="black" />
+											</svg>
+										</button>
+									</div>
+								</div>
 							</div>
 
 							<div class="form-group">
 								<button class="form-control btn btn-primary rounded submit px-3" name="button" value="login">Login</button>
 							</div>
 						</form>
-
-						</div>
 					</div>
-				}
-			</div>
+				</div>
+			}
 		</div>
+	</div>
 
+	<script src="~/js/ShowAndHide.js"></script>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/popper.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/main.js"></script>
-
 </body>
 </html>
-

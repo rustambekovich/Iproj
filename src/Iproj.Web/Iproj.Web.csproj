@@ -13,6 +13,22 @@
     <None Remove="Views\Auth\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Controllers\Accaunt\eye-removebg-preview.png" />
+    <None Remove="Controllers\Accaunt\hidden-removebg-preview.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Controllers\Accaunt\eye-removebg-preview.png">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Controllers\Accaunt\hidden-removebg-preview.png">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="13.0.1" />
 		<PackageReference Include="IdentityServer4" Version="4.1.2" />
