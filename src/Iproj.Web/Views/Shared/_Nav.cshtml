@@ -10,9 +10,9 @@
 
 @if (User.Identity!.IsAuthenticated)
 {
-    <nav class="navbar navbar-expand-lg  navbar-dark bg-success">
-        <a href="~/Account/Profile" class="navbar-brand">
-            <img src="~/Iproj_login_image5.png" height="40px" width="40px" class="icon-banner" alt="Logo">
+    <nav class="navbar navbar-expand-lg  navbar-dark alert-primary">
+        <a href="~/Account/Profile" class="navbar-brand text-dark">
+            <img src="~/Iproj_login_image5.png" height="50px" width="50px" class="icon-banner" alt="Logo">
         Iproj
     </a>
 
@@ -20,18 +20,18 @@
         <ul class="navbar-nav mr-auto">
 
             <li class="nav-item">
-                <a href="~/Account/Profile" class="nav-link">Profile Info</a>
+                    <a href="~/Account/Profile" class="nav-link text-dark">Profile Info</a>
             </li>
 
             <li class="nav-item">
-                    <a href="~/Account/ChangePassword" class="nav-link">Change Password</a>
+                    <a href="~/Account/ChangePassword" class="nav-link text-dark">Change Password</a>
             </li>
         </ul>
 
         
         <ul class="navbar-nav ml-auto">
              <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">@name <b class="caret"></b></a>
+                    <a href="#" class="nav-link dropdown-toggle text-dark" data-toggle="dropdown">@name <b class="caret"></b></a>
                     <div class="dropdown-menu dropdown-menu-right">
                         <a class="dropdown-item" asp-action="Logout" asp-controller="Account">Logout</a>
                     </div>
