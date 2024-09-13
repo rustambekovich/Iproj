@@ -1,7 +1,27 @@
-﻿@{
+﻿@using Iproj.Web.ViewModels
+@model UserViewModel
+
+@{
     ViewData["Title"] = "Profile Page";
 }
 
 <h2>Profile Information</h2>
 
 <p>Here is the profile information of the logged-in user.</p>
+
+<div>
+    <h3>User Details</h3>
+    <p><strong>Username:</strong> @Model.UserName</p>
+    <p><strong>Email:</strong> @Model.Email</p>
+    <p><strong>Role:</strong> @Model.Role</p>
+
+    @if (!string.IsNullOrEmpty(Model.ProfilePictureUrl))
+    {
+        <p><strong>Profile Picture:</strong></p>
+        <img src="@Model.Fullname" alt="Profile Picture" style="width:150px; height:auto;" />
+    }
+    else
+    {
+        <p><strong>No profile picture available.</strong></p>
+    }
+</div>

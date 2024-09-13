@@ -10,6 +10,7 @@ using Iproj.InputModels;
 using Iproj.Services.Auth;
 using Iproj.ViewModels;
 using Iproj.Web.Commons;
+using Iproj.Web.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -54,14 +55,94 @@ public class AccountController : Controller
 
 
     [HttpGet]
-    public IActionResult Profile()
+    public async Task<IActionResult> Profile()
     {
-        // Fetch user profile data here, if needed
+        string email = string.Empty;
+        string Id;
+
+        var data = HttpContext.User.GetSubId();
+        var role = HttpContext.User.GetRole();
+        if (data != null)
+        {
+            var parts = data.Split('|');
+
+            if (parts.Length == 2)
+            {
+                email = parts[1];
+                Id = parts[0];
+            }
+        }
+
+        var userData = await _signInManager.UserManager.FindByEmailAsync(email);
+
+        if (userData != null)
+        {
+            UserViewModel userView = new UserViewModel()
+            {
+                Role = role,
+                UserName = userData.UserName!,
+                Email = email,
+            };
+
+            return View(userView);
+        }
         return View();
     }
 
     [HttpGet]
     public IActionResult ChangePassword()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        string email = string.Empty;
+        string Id;
+
+        var data = HttpContext.User.GetSubId();
+
+        if (data != null)
+        {
+            var parts = data.Split('|');
+
+            if (parts.Length == 2)
+            {
+                email = parts[1];
+                Id = parts[0];
+            }
+        }
+
+        var user = await _signInManager.UserManager.FindByEmailAsync(email);
+        
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        var result = await _signInManager.UserManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+        
+        if (result.Succeeded)
+        {
+            return RedirectToAction("PasswordChangeSuccess");
+        }
+
+        foreach (var error in result.Errors)
+        {
+            ModelState.AddModelError(string.Empty, error.Description);
+        }
+
+        return View(model);
+    }
+
+    public IActionResult PasswordChangeSuccess()
     {
         return View();
     }
@@ -153,7 +234,7 @@ public class AccountController : Controller
         var vm = await BuildLoggedOutViewModelAsync(model.LogoutId);
 
         if (vm.PostLogoutRedirectUri == null)
-            vm.PostLogoutRedirectUri = "https://auth.iproj.uz";
+            vm.PostLogoutRedirectUri = "/";
 
         if (User?.Identity!.IsAuthenticated == true)
         {
