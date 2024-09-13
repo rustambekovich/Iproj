@@ -45,9 +45,22 @@ public class AccountController : Controller
         _authService = authService;
     }
 
+
     [HttpGet]
     public async Task<IActionResult> Login(string returnUrl)
     {
+        if (User.Identity!.IsAuthenticated)
+        {
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                return Redirect(returnUrl);  // Redirect to the original page they were trying to access
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home"); // Redirect to home page if no returnUrl is specified
+            }
+        }
+
         var vm = await BuildLoginViewModelAsync(returnUrl);
 
         return View(vm);
