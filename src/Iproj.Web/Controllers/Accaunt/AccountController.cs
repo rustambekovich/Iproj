@@ -47,11 +47,25 @@ public class AccountController : Controller
     [HttpGet]
     public async Task<IActionResult> Login(string returnUrl)
     {
-
         var vm = await BuildLoginViewModelAsync(returnUrl);
 
         return View(vm);
     }
+
+
+    [HttpGet]
+    public IActionResult Profile()
+    {
+        // Fetch user profile data here, if needed
+        return View();
+    }
+
+    [HttpGet]
+    public IActionResult ChangePassword()
+    {
+        return View();
+    }
+
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -124,7 +138,7 @@ public class AccountController : Controller
     [HttpGet]
     public async Task<IActionResult> Logout(string logoutId)
     {
-        var vm = await _authService.BuildLogoutViewModelAsync(logoutId);
+        var vm = await BuildLogoutViewModelAsync(logoutId);
 
         if (vm.ShowLogoutPrompt == false)
             return await Logout(vm);
@@ -137,6 +151,9 @@ public class AccountController : Controller
     public async Task<IActionResult> Logout(LogoutInputModel model)
     {
         var vm = await BuildLoggedOutViewModelAsync(model.LogoutId);
+
+        if (vm.PostLogoutRedirectUri == null)
+            vm.PostLogoutRedirectUri = "https://auth.iproj.uz";
 
         if (User?.Identity!.IsAuthenticated == true)
         {
@@ -263,6 +280,29 @@ public class AccountController : Controller
                     vm.ExternalAuthenticationScheme = idp;
                 }
             }
+        }
+
+        return vm;
+    }
+
+    private async Task<LogoutViewModel> BuildLogoutViewModelAsync(string logoutId)
+    {
+        var vm = new LogoutViewModel { LogoutId = logoutId, ShowLogoutPrompt = AccountOptions.ShowLogoutPrompt };
+
+        if (User?.Identity.IsAuthenticated != true)
+        {
+            // if the user is not authenticated, then just show logged out page
+            vm.ShowLogoutPrompt = false;
+            return vm;
+        }
+
+        var context = await _interaction.GetLogoutContextAsync(logoutId);
+
+        if (context?.ShowSignoutPrompt == false)
+        {
+            // it's safe to automatically sign-out
+            vm.ShowLogoutPrompt = false;
+            return vm;
         }
 
         return vm;
