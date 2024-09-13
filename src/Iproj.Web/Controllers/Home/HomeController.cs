@@ -25,8 +25,8 @@ public class HomeController : Controller
     {
         if (_environment.IsDevelopment() || _environment.IsProduction())
         {
-            // only show in development
-            return View();
+
+            return Redirect("Account/Profile");
         }
 
         _logger.LogInformation("Homepage is disabled in production. Returning 404.");
