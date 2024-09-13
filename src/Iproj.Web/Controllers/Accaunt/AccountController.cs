@@ -51,9 +51,10 @@ public class AccountController : Controller
     {
         if (User.Identity!.IsAuthenticated)
         {
+            // If authenticated, redirect them to the returnUrl or home page
             if (!string.IsNullOrEmpty(returnUrl))
             {
-                return Redirect(returnUrl);  // Redirect to the original page they were trying to access
+                return Redirect("https://auth.iproj.uz");  // Redirect to the original page they were trying to access
             }
             else
             {
@@ -61,6 +62,7 @@ public class AccountController : Controller
             }
         }
 
+        // If the user is not authenticated, show the login page
         var vm = await BuildLoginViewModelAsync(returnUrl);
 
         return View(vm);
