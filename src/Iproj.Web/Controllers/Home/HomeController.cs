@@ -23,14 +23,7 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        if (_environment.IsDevelopment() || _environment.IsProduction())
-        {
-
-            return Redirect("Account/Profile");
-        }
-
-        _logger.LogInformation("Homepage is disabled in production. Returning 404.");
-        return NotFound();
+        return Redirect("Account/Profile");
     }
 
     /// <summary>

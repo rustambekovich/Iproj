@@ -45,6 +45,10 @@ public class AccountController : Controller
         _authService = authService;
     }
 
+    public IActionResult Main()
+    {
+        return View();
+    }
 
     [HttpGet]
     public async Task<IActionResult> Login(string returnUrl)
