@@ -1,27 +1,37 @@
 ﻿@using Iproj.Web.ViewModels
 @model UserViewModel
 
-@{
-    ViewData["Title"] = "Profile Page";
-}
+<partial name="_ValidSummary" />
+<div class="row justify-content-md-center">
+    <div class="col-md-7 col-lg-5">
+        <div class="login-wrap p-4 p-md-5">
 
-<h2>Profile Information</h2>
+            <div class="d-flex align-items-center justify-content-center">
+                <h1>
+                    <h1>
+                        <img src="~/user_profile2.png" height="200px" width="200px" />
+                    </h1>
+                </h1>
+            </div>
+            <h3 class="text-center mt-4">Profile Information</h3>
 
-<p>Here is the profile information of the logged-in user.</p>
+            <!-- Profil ma'lumotlarini ko'rsatish uchun div bloklar -->
+            <div class="form-group">
+                <label>Email:</label>
+                <p class="form-control">@Model.Email</p>
+            </div>
 
-<div>
-    <h3>User Details</h3>
-    <p><strong>Username:</strong> @Model.UserName</p>
-    <p><strong>Email:</strong> @Model.Email</p>
-    <p><strong>Role:</strong> @Model.Role</p>
+            <div class="form-group">
+                <label>Name:</label>
+                <p class="form-control">@Model.UserName</p>
+            </div>
 
-    @if (!string.IsNullOrEmpty(Model.ProfilePictureUrl))
-    {
-        <p><strong>Profile Picture:</strong></p>
-        <img src="@Model.Fullname" alt="Profile Picture" style="width:150px; height:auto;" />
-    }
-    else
-    {
-        <p><strong>No profile picture available.</strong></p>
-    }
+            <div class="form-group">
+                <label>Role:</label>
+                <p class="form-control">@Model.Role</p>
+            </div>
+        </div>
+    </div>
 </div>
+
+    
