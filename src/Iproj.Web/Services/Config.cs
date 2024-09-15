@@ -78,6 +78,36 @@ public class Config
 
                     RequirePkce = true,
                     AllowPlainTextPkce = false
+                },
+
+                new Client
+                {
+                    ClientId = "oidcMVCAppAdmin",
+                    ClientName = "Sample ASP.NET Core MVC Web App Admin",
+                    ClientSecrets = new List<Secret> {new Secret("Wabase".Sha256())},
+
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RedirectUris = new List<string>
+                    {
+                        "https://admin.iproj.uz/signin-oidc",
+                    },
+                    FrontChannelLogoutUri = "https://admin.iproj.uz/signout-oidc",
+                    PostLogoutRedirectUris =
+                    {
+                        "https://admin.iproj.uz/signout-callback-oidc",
+                    },
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                        "role",
+                        "message.write",
+                        "message.write"
+                    },
+
+                    RequirePkce = true,
+                    AllowPlainTextPkce = false
                 }
            };
 }
