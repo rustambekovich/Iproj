@@ -102,7 +102,7 @@ public class Config
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
                         "role",
-                        "message.write",
+                        "message.read",
                         "message.write"
                     },
 
