@@ -83,6 +83,9 @@ app.UseIdentityServer();
 
 SeedData.EnsureSeedData(defaultConnection!);
 
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapDefaultControllerRoute();
+});
 
 app.Run();
