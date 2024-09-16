@@ -18,9 +18,9 @@
 </head>
 
 <body>
+
     @if (ViewBag.IsErrorPage == null || ViewBag.IsErrorPage == false)
     {
-        <!--Saidbar-->
         <div class="sidebar">
             @* <div class="header-container" style="display:flex; 
                 align-items:center; justify-content:center">
@@ -49,9 +49,13 @@
                 </li>
             </ul>
         </div>
+    }
+    <!--Saidbar-->
 
         <div class="content">
             <!--navbar-->
+        @if (ViewBag.IsErrorPage == null || ViewBag.IsErrorPage == false)
+        {
             <div class="container">
                 <nav class="navbar navbar-expand-sm navbar-light bg-blue border-bottom box-shadow mb-3">
                     <div class="container-fluid d-flex justify-content-between align-items-center">
@@ -72,6 +76,7 @@
                     </div>
                 </nav>
             </div>
+        }
 
             <!-- Main container -->
             <div class="maincontainer" style="padding-top:25px;">
@@ -81,10 +86,7 @@
             </div>
 
         </div>
-    }
-
-
-
+ 
     <link href="~/flowbite/flowbite.css" rel="stylesheet" />
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
