@@ -46,6 +46,8 @@ public class HomeController : Controller
             }
         }
 
+        ViewBag.IsErrorPage = true;  // Set a flag to indicate error page
+
         return View("Error", vm);
     }
 }
