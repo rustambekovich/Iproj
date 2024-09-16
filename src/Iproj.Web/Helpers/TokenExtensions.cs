@@ -50,5 +50,4 @@ public static class TokenExtensions
 
         return (null, null);
     }
-
 }

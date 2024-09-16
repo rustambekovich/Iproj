@@ -26,14 +26,10 @@ public class HomeController : Controller
         return Redirect("Account/Profile");
     }
 
-    /// <summary>
-    /// Shows the error page
-    /// </summary>
     public async Task<IActionResult> Error(string errorId)
     {
         var vm = new ErrorViewModel();
 
-        // retrieve error details from identityserver
         var message = await _interaction.GetErrorContextAsync(errorId);
         if (message != null)
         {
@@ -41,12 +37,11 @@ public class HomeController : Controller
 
             if (!_environment.IsDevelopment())
             {
-                // only show in development
                 message.ErrorDescription = null;
             }
         }
 
-        ViewBag.IsErrorPage = true;  // Set a flag to indicate error page
+        ViewBag.IsErrorPage = true; 
 
         return View("Error", vm);
     }

@@ -42,14 +42,6 @@ public class Config
     public static IEnumerable<Client> Clients =>
            new[]
            {
-                /*new Client
-                {
-                    ClientId = "weatherApi",
-                    ClientName = "ASP.NET Core Weather Api",
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    ClientSecrets = new List<Secret> {new Secret("Wabase".Sha256())},
-                    AllowedScopes = new List<string> {"weatherApi.read"}
-                },*/
                 new Client
                 {
                     ClientId = "oidcMVCApp",
@@ -59,12 +51,12 @@ public class Config
                     AllowedGrantTypes = GrantTypes.Code,
                     RedirectUris = new List<string>
                     {
-						"https://iproj.uz/signin-oidc",
+                        "https://iproj.uz/signin-oidc",
                     },
                     FrontChannelLogoutUri = "https://iproj.uz/signout-oidc",
                     PostLogoutRedirectUris =
                     {
-						"https://iproj.uz/signout-callback-oidc",
+                        "https://iproj.uz/signout-callback-oidc",
                     },
                     AllowedScopes = new List<string>
                     {

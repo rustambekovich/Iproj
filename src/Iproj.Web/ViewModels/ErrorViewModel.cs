@@ -5,8 +5,7 @@ namespace Iproj.ViewModels
     public class ErrorViewModel
     {
         public ErrorViewModel()
-        {
-        }
+        {}
 
         public ErrorViewModel(string error)
         {

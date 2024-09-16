@@ -55,7 +55,6 @@ public class AccountController : Controller
     {
         if (User.Identity!.IsAuthenticated)
         {
-            // If authenticated, redirect them to the returnUrl or home page
             if (!string.IsNullOrEmpty(returnUrl))
             {
                 return Redirect("https://auth.iproj.uz");  // Redirect to the original page they were trying to access
@@ -66,7 +65,6 @@ public class AccountController : Controller
             }
         }
 
-        // If the user is not authenticated, show the login page
         var vm = await BuildLoginViewModelAsync(returnUrl);
 
         return View(vm);
@@ -257,7 +255,6 @@ public class AccountController : Controller
 
         if (User?.Identity!.IsAuthenticated == true)
         {
-            // delete local authentication cookie
             await _signInManager.SignOutAsync();
             await HttpContext.SignOutAsync();
 
@@ -272,9 +269,7 @@ public class AccountController : Controller
             return SignOut(new AuthenticationProperties { RedirectUri = url }, vm.ExternalAuthenticationScheme);
         }
 
-        return Redirect(vm.PostLogoutRedirectUri); // added
-
-        //return View("LoggedOut", vm);
+        return Redirect(vm.PostLogoutRedirectUri);
     }
 
     [HttpGet]
@@ -308,7 +303,7 @@ public class AccountController : Controller
 
             if (!local)
             {
-                vm.ExternalProviders = new[] { new ExternalProvider { AuthenticationScheme = context.IdP } };
+                vm.ExternalProviders = new[] { new ExternalProvider { AuthenticationScheme = context!.IdP } };
             }
 
             return vm;
@@ -364,7 +359,7 @@ public class AccountController : Controller
             LogoutId = logoutId
         };
 
-        if (User?.Identity.IsAuthenticated == true)
+        if (User?.Identity!.IsAuthenticated == true)
         {
             var idp = User.FindFirst(JwtClaimTypes.IdentityProvider)?.Value;
 
@@ -389,9 +384,8 @@ public class AccountController : Controller
     {
         var vm = new LogoutViewModel { LogoutId = logoutId, ShowLogoutPrompt = AccountOptions.ShowLogoutPrompt };
 
-        if (User?.Identity.IsAuthenticated != true)
+        if (User?.Identity!.IsAuthenticated != true)
         {
-            // if the user is not authenticated, then just show logged out page
             vm.ShowLogoutPrompt = false;
             return vm;
         }
@@ -400,7 +394,6 @@ public class AccountController : Controller
 
         if (context?.ShowSignoutPrompt == false)
         {
-            // it's safe to automatically sign-out
             vm.ShowLogoutPrompt = false;
             return vm;
         }
