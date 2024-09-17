@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Iproj.Controllers.Accaunt;
 
@@ -28,6 +29,7 @@ public class AccountController : Controller
     private readonly IEventService _events;
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly IAuthService _authService;
+    private readonly AppSettings _appSettings;
 
     public AccountController(
         IIdentityServerInteractionService interaction,
@@ -35,7 +37,8 @@ public class AccountController : Controller
         IAuthenticationSchemeProvider schemeProvider,
         IEventService events,
         SignInManager<IdentityUser> signInManager,
-        IAuthService authService)
+        IAuthService authService,
+        IOptions<AppSettings> appSettings)
     {
         _interaction = interaction;
         _clientStore = clientStore;
@@ -43,6 +46,7 @@ public class AccountController : Controller
         _events = events;
         _signInManager = signInManager;
         _authService = authService;
+        _appSettings = appSettings.Value;
     }
 
     public IActionResult Main()
@@ -57,7 +61,7 @@ public class AccountController : Controller
         {
             if (!string.IsNullOrEmpty(returnUrl))
             {
-                return Redirect("https://auth.iproj.uz");  // Redirect to the original page they were trying to access
+                return Redirect(_appSettings.BaseUrl);  // Redirect to the original page they were trying to access
             }
             else
             {
@@ -65,30 +69,22 @@ public class AccountController : Controller
             }
         }
 
-        var vm = await BuildLoginViewModelAsync(returnUrl);
+        var viewModel = await BuildLoginViewModelAsync(returnUrl);
 
-        return View(vm);
+        return View(viewModel);
     }
 
 
     [HttpGet]
     public async Task<IActionResult> Profile()
     {
-        string email = string.Empty;
-        string Id;
-
         var data = HttpContext.User.GetSubId();
         var role = HttpContext.User.GetRole();
-        if (data != null)
-        {
-            var parts = data.Split('|');
 
-            if (parts.Length == 2)
-            {
-                email = parts[1];
-                Id = parts[0];
-            }
-        }
+        var emailAdnId = Iproj.Helpers.TokenExtensions.GetEmailAndId(data);
+
+        string email = emailAdnId.Gmail!;
+        Guid? Id = emailAdnId.Id;
 
         var userData = await _signInManager.UserManager.FindByEmailAsync(email);
 
@@ -121,21 +117,11 @@ public class AccountController : Controller
             return View(model);
         }
 
-        string email = string.Empty;
-        string Id;
-
         var data = HttpContext.User.GetSubId();
+        var emailAdnId = Iproj.Helpers.TokenExtensions.GetEmailAndId(data);
 
-        if (data != null)
-        {
-            var parts = data.Split('|');
-
-            if (parts.Length == 2)
-            {
-                email = parts[1];
-                Id = parts[0];
-            }
-        }
+        string email = emailAdnId.Gmail!;
+        Guid? Id = emailAdnId.Id;
 
         var user = await _signInManager.UserManager.FindByEmailAsync(email);
         
@@ -167,7 +153,7 @@ public class AccountController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login(LoginInputModel model, string button)
+    public async Task<IActionResult> Login(LoginInputModel model)
     {
         var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
 
@@ -202,10 +188,6 @@ public class AccountController : Controller
 
                 if (context != null)
                 {
-                    // check web or mobil and desktop
-                    if (context.IsNativeClient())
-                        return this.LoadingPage("Redirect", model.ReturnUrl);
-
                     return Redirect(model.ReturnUrl);
                 }
 
@@ -223,14 +205,16 @@ public class AccountController : Controller
                 }
             }
 
+            // log in error save to logs
             await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials", clientId: context?.Client.ClientId));
-
+            // input eror
             ModelState.AddModelError(string.Empty, AccountOptions.InvalidCredentialsErrorMessage);
         }
 
         // something went wrong, show form with error
-        var vm = await BuildLoginViewModelAsync(model);
-        return View(vm);
+        var viewModel = await BuildLoginViewModelAsync(model);
+
+        return View(viewModel);
     }
 
     [HttpGet]
@@ -248,10 +232,10 @@ public class AccountController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout(LogoutInputModel model)
     {
-        var vm = await BuildLoggedOutViewModelAsync(model.LogoutId);
+        var viewModel = await BuildLoggedOutViewModelAsync(model.LogoutId);
 
-        if (vm.PostLogoutRedirectUri == null)
-            vm.PostLogoutRedirectUri = "/";
+        if (viewModel.PostLogoutRedirectUri == null)
+            viewModel.PostLogoutRedirectUri = "/";
 
         if (User?.Identity!.IsAuthenticated == true)
         {
@@ -262,14 +246,14 @@ public class AccountController : Controller
             await _events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));
         }
 
-        if (vm.TriggerExternalSignout)
+        if (viewModel.TriggerExternalSignout)
         {
-            string url = Url.Action("Logout", new { logoutId = vm.LogoutId })!;
+            string url = Url.Action("Logout", new { logoutId = viewModel.LogoutId })!;
 
-            return SignOut(new AuthenticationProperties { RedirectUri = url }, vm.ExternalAuthenticationScheme);
+            return SignOut(new AuthenticationProperties { RedirectUri = url }, viewModel.ExternalAuthenticationScheme);
         }
 
-        return Redirect(vm.PostLogoutRedirectUri);
+        return Redirect(viewModel.PostLogoutRedirectUri);
     }
 
     [HttpGet]
@@ -280,10 +264,10 @@ public class AccountController : Controller
 
     private async Task<LoginViewModel> BuildLoginViewModelAsync(LoginInputModel model)
     {
-        var vm = await BuildLoginViewModelAsync(model.ReturnUrl);
-        vm.Username = model.Username;
-        vm.RememberLogin = model.RememberLogin;
-        return vm;
+        var viewModel = await BuildLoginViewModelAsync(model.ReturnUrl);
+        viewModel.Username = model.Username;
+        viewModel.RememberLogin = model.RememberLogin;
+        return viewModel;
     }
 
     private async Task<LoginViewModel> BuildLoginViewModelAsync(string returnUrl)
@@ -294,7 +278,7 @@ public class AccountController : Controller
         {
             var local = context.IdP == IdentityServer4.IdentityServerConstants.LocalIdentityProvider;
 
-            var vm = new LoginViewModel
+            var viewModel = new LoginViewModel
             {
                 EnableLocalLogin = local,
                 ReturnUrl = returnUrl,
@@ -303,10 +287,10 @@ public class AccountController : Controller
 
             if (!local)
             {
-                vm.ExternalProviders = new[] { new ExternalProvider { AuthenticationScheme = context!.IdP } };
+                viewModel.ExternalProviders = new[] { new ExternalProvider { AuthenticationScheme = context!.IdP } };
             }
 
-            return vm;
+            return viewModel;
         }
 
         var schemes = await _schemeProvider.GetAllSchemesAsync();
@@ -382,22 +366,26 @@ public class AccountController : Controller
 
     private async Task<LogoutViewModel> BuildLogoutViewModelAsync(string logoutId)
     {
-        var vm = new LogoutViewModel { LogoutId = logoutId, ShowLogoutPrompt = AccountOptions.ShowLogoutPrompt };
+        var viewModel = new LogoutViewModel 
+        { 
+            LogoutId = logoutId, 
+            ShowLogoutPrompt = AccountOptions.ShowLogoutPrompt 
+        };
 
         if (User?.Identity!.IsAuthenticated != true)
         {
-            vm.ShowLogoutPrompt = false;
-            return vm;
+            viewModel.ShowLogoutPrompt = false;
+            return viewModel;
         }
 
         var context = await _interaction.GetLogoutContextAsync(logoutId);
 
         if (context?.ShowSignoutPrompt == false)
         {
-            vm.ShowLogoutPrompt = false;
-            return vm;
+            viewModel.ShowLogoutPrompt = false;
+            return viewModel;
         }
 
-        return vm;
+        return viewModel;
     }
 }

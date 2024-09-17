@@ -2,7 +2,7 @@ name: iproj development branch
  
 on:
   push:
-    branches: [ main ]
+    branches: [ MASTER ]
  
 env:
   API_IMAGE_NAME: iproj-image

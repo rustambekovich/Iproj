@@ -28,12 +28,13 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Error(string errorId)
     {
-        var vm = new ErrorViewModel();
+        var viewModel = new ErrorViewModel();
 
         var message = await _interaction.GetErrorContextAsync(errorId);
+
         if (message != null)
         {
-            vm.Error = message;
+            viewModel.Error = message;
 
             if (!_environment.IsDevelopment())
             {
@@ -43,6 +44,6 @@ public class HomeController : Controller
 
         ViewBag.IsErrorPage = true; 
 
-        return View("Error", vm);
+        return View("Error", viewModel);
     }
 }
