@@ -1,11 +1,11 @@
-﻿using IdentityModel;
+﻿
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.EntityFramework.Storage;
 using Iproj.DataAccess;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
+using System.Linq;
 
 namespace Iproj.Services;
 
@@ -67,7 +67,7 @@ public class SeedData
     {
         var userMenenger = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-        var usersData = Users.Get();
+        var usersData = Users.Get(); 
 
         if (usersData != null && usersData.Count() > 0)
         {
