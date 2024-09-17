@@ -2,5 +2,5 @@ namespace Iproj.ViewModels;
 
 public class RedirectViewModel
 {
-    public string RedirectUrl { get; set; }
+    public string RedirectUrl { get; set; } = string.Empty;
 }

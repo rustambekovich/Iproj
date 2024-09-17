@@ -1,6 +1,7 @@
 using Iproj.DataAccess;
 using Iproj.Services;
 using Iproj.Services.Auth;
+using Iproj.Web.Commons;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ var assblyname = typeof(Program).Assembly.GetName().Name;
 
 var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 
+// save project migration
 builder.Services.AddDbContext<IprojAspNetDbContext>(options =>
     options.UseNpgsql(defaultConnection,
     d => d.MigrationsAssembly(assblyname)));
@@ -33,7 +35,6 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 
 builder.Services.AddIdentityServer(options =>
 {
-    // Set the issuer URI to ensure all URLs are generated with HTTPS
     options.IssuerUri = "https://auth.iproj.uz";
     
 }).AddConfigurationStore(options =>
@@ -44,7 +45,7 @@ builder.Services.AddIdentityServer(options =>
     .AddOperationalStore(options =>
     {
         options.ConfigureDbContext = d =>
-        d.UseNpgsql(defaultConnection, opt => opt.MigrationsAssembly(assblyname));
+        d.UseNpgsql(defaultConnection, opt => opt.MigrationsAssembly(assblyname)); 
     })
     .AddInMemoryClients(Config.Clients)
     .AddInMemoryIdentityResources(Config.IdentityResources)
@@ -56,7 +57,7 @@ builder.Services.AddIdentityServer(options =>
 builder.Services.AddMvc();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddControllersWithViews();
-
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie();
 
