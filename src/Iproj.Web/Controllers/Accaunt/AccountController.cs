@@ -246,13 +246,6 @@ public class AccountController : Controller
             await _events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));
         }
 
-        if (viewModel.TriggerExternalSignout)
-        {
-            string url = Url.Action("Logout", new { logoutId = viewModel.LogoutId })!;
-
-            return SignOut(new AuthenticationProperties { RedirectUri = url }, viewModel.ExternalAuthenticationScheme);
-        }
-
         return Redirect(viewModel.PostLogoutRedirectUri);
     }
 

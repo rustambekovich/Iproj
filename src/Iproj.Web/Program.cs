@@ -1,3 +1,4 @@
+using IdentityServer4.Models;
 using Iproj.DataAccess;
 using Iproj.Services;
 using Iproj.Services.Auth;
@@ -5,6 +6,7 @@ using Iproj.Web.Commons;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +35,11 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 })
 	.AddEntityFrameworkStores<IprojAspNetDbContext>();
 
+var clients = builder.Configuration.GetSection("IdentityServer:Clients").Get<List<Client>>();
+var identityResources = builder.Configuration.GetSection("IdentityServer:IdentityResources").Get<List<IdentityResource>>();
+var apiScopes = builder.Configuration.GetSection("IdentityServer:ApiScopes").Get<List<ApiScope>>();
+var apiResources = builder.Configuration.GetSection("IdentityServer:ApiResources").Get<List<ApiResource>>();
+
 builder.Services.AddIdentityServer(options =>
 {
     options.IssuerUri = "https://auth.iproj.uz";
@@ -45,12 +52,12 @@ builder.Services.AddIdentityServer(options =>
     .AddOperationalStore(options =>
     {
         options.ConfigureDbContext = d =>
-        d.UseNpgsql(defaultConnection, opt => opt.MigrationsAssembly(assblyname)); 
+        d.UseNpgsql(defaultConnection, opt => opt.MigrationsAssembly(assblyname));
     })
-    .AddInMemoryClients(Config.Clients)
-    .AddInMemoryIdentityResources(Config.IdentityResources)
-    .AddInMemoryApiResources(Config.ApiResources)
-    .AddInMemoryApiScopes(Config.ApiScopes)
+    .AddInMemoryClients(clients)
+    .AddInMemoryIdentityResources(identityResources)
+    .AddInMemoryApiResources(apiResources)
+    .AddInMemoryApiScopes(apiScopes)
     .AddDeveloperSigningCredential();
 
 
