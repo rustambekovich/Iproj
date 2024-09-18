@@ -98,9 +98,6 @@ public class AuthService : IAuthService
 
     public async Task<IdentityUser> LoginAsync(LoginInputModel model)
     {
-        // check if we are in the context of an authorization request
-        var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
-
         var user = await _signInManager.UserManager.FindByEmailAsync(model.Username);
 
         if (user != null)
